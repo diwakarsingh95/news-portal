@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #fdfdfd;
+  font-family: "Roboto", sans-serif;
+}
+
+header,
+footer {
+  font-family: "Raleway", sans-serif;
+}
