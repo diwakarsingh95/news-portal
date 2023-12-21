@@ -8,7 +8,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Header />
-      <main className="mt-[80px]">{children}</main>
+      <main className="my-[80px]">{children}</main>
       <Footer />
     </>
   );
