@@ -15,7 +15,7 @@ const baseQueryWithAuth = ({ baseUrl }: { baseUrl: string }) => {
   > = async (args, api, extraOptions) => {
     const result = await baseQuery(args, api, extraOptions);
     if (result.error && result.error.status === 401) {
-      window?.location.replace("/sign-in");
+      return result;
     }
     return result;
   };

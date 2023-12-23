@@ -3,6 +3,7 @@ import DefaultImage from "../../assets/hot-topic-deafult.webp";
 import { relativeTimeToDate } from "../../utils/dayjs";
 import InfiniteScroll from "../InfiniteScroll";
 import LatestNewsSkeleton from "./LatestNewsSkeleton";
+import { NEWS_API_KEY } from "../../utils/constants";
 
 const LatestNews = () => {
   const limit = 100;
@@ -15,10 +16,10 @@ const LatestNews = () => {
   const [scrollDirection, setScrollDirection] = useState("down");
 
   const fetchData = async (page: number) => {
-    const API_KEY = import.meta.env.VITE_NEWS_API_KEY as string;
     try {
+      console.log("fetchData", page);
       const res = await fetch(
-        `https://newsapi.org/v2/everything?q=news&sortBy=publishedAtpageSize=${limit}&page=${page}&apiKey=${API_KEY}`
+        `https://newsapi.org/v2/everything?q=news&sortBy=publishedAtpageSize=${limit}&page=${page}&apiKey=${NEWS_API_KEY}`
       );
       const data = (await res.json()) as NewsResponse;
       return data;
@@ -52,6 +53,7 @@ const LatestNews = () => {
         setItems(newItems);
         setTotalResults(data.totalResults);
         setCurrentPage((state) => state - 1);
+        setIsLoading(false);
         return true;
       }
       setScrollDirection("");
@@ -76,6 +78,7 @@ const LatestNews = () => {
         setItems(newItems);
         setTotalResults(data.totalResults);
         setCurrentPage((state) => state + 1);
+        setIsLoading(false);
         return true;
       }
       setIsLoading(false);

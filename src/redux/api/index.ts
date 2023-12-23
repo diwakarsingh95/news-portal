@@ -1,7 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithAuth from "./baseQueryWithAuth";
-
-const API_KEY = import.meta.env.VITE_NEWS_API_KEY as string;
+import { NEWS_API_KEY, WEATHER_API_KEY } from "../../utils/constants";
 
 export const newsApi = createApi({
   reducerPath: "news",
@@ -11,7 +10,7 @@ export const newsApi = createApi({
   endpoints: (builder) => ({
     getTopHeadlines: builder.query<NewsResponse, NewsQueryParams>({
       query: ({ pageSize, page }) => {
-        const url = `top-headlines?country=in&pageSize=${pageSize}&page=${page}&apiKey=${API_KEY}`;
+        const url = `top-headlines?country=in&pageSize=${pageSize}&page=${page}&apiKey=${NEWS_API_KEY}`;
         return url;
       }
     })
@@ -26,9 +25,9 @@ export const weatherApi = createApi({
   keepUnusedDataFor: 0,
   tagTypes: ["Weather"],
   endpoints: (builder) => ({
-    getCurrentWeatherData: builder.query<NewsResponse, NewsQueryParams>({
+    getCurrentWeatherData: builder.query<NewsResponse, void>({
       query: () => {
-        const url = `onecall?lat={lat}&lon={lon}&appid={API key}`;
+        const url = `onecall?lat=28.535517&lon=77.391029&appid=${WEATHER_API_KEY}`;
         return url;
       }
     })

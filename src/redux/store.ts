@@ -1,8 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { newsApi } from "./api";
+import { newsApi, weatherApi } from "./api";
 
 const rootReducer = combineReducers({
-  [newsApi.reducerPath]: newsApi.reducer
+  [newsApi.reducerPath]: newsApi.reducer,
+  [weatherApi.reducerPath]: weatherApi.reducer
 });
 
 export const store = configureStore({
@@ -10,7 +11,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false
-    }).concat(newsApi.middleware)
+    }).concat([newsApi.middleware, weatherApi.middleware])
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
