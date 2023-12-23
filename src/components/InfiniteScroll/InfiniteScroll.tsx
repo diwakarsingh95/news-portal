@@ -1,15 +1,11 @@
-import React, { useRef, useState } from "react";
-import debounce from "lodash.debounce";
+import React, { useCallback, useEffect, useState } from "react";
 
 type InfiniteScrollProps = {
   offset?: number;
-  currentPage: number;
   totalResults: number;
-  buffer: number;
   limit: number;
-  rowHeight: number;
+  contentHeight: number;
   isLoading: boolean;
-  onPrevCallback: () => Promise<boolean>;
   onNextCallback: () => Promise<boolean>;
   children: React.ReactNode;
 };
@@ -17,80 +13,59 @@ type InfiniteScrollProps = {
 const InfiniteScroll = ({
   offset = 0,
   totalResults,
-  currentPage,
-  buffer,
   limit,
-  rowHeight,
+  contentHeight,
   isLoading,
-  onPrevCallback,
   onNextCallback,
   children
 }: InfiniteScrollProps) => {
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const [upperBoundary, setUpperBoundary] = useState(offset);
-  const [lowerBoundary, setLowerBoundary] = useState(buffer - 1);
-  const [currentScrollTopPosition, setCurrentScrollTopPosition] = useState(0);
+  const [fetchedResults, setFetchedResults] = useState(offset);
+  const [currentScrollHeightThreshold, setCurrentScrollHeightThreshold] =
+    useState(0);
 
-  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+  const handleScroll = useCallback(() => {
     if (isLoading) {
       return;
     }
 
-    const { target: tgt } = e;
-    const target = tgt as HTMLElement;
+    const target = document.documentElement;
     const scrollTop = Math.round(target.scrollTop);
     const clientHeight = Math.round(target.clientHeight);
     const scrollHeight = Math.round(target.scrollHeight);
+    const scrollThreshold = scrollHeight - contentHeight / 2;
 
-    const isUp = scrollTop < currentScrollTopPosition;
-
-    if (isUp && currentPage > 1 && scrollTop < 500) {
-      onPrevCallback()
-        .then((success) => {
-          if (success) {
-            setUpperBoundary(upperBoundary - limit);
-            setLowerBoundary(lowerBoundary - limit);
-
-            if (overlayRef !== null) {
-              const scrollPos = limit * rowHeight;
-              overlayRef.current?.scrollTo(0, scrollPos);
-            }
-          }
-        })
-        .catch(() => {});
-    } else if (
-      !isUp &&
-      totalResults > upperBoundary &&
-      scrollTop + clientHeight >= scrollHeight - 500
+    if (
+      totalResults > fetchedResults &&
+      scrollTop + clientHeight >= scrollThreshold &&
+      scrollThreshold > 0 &&
+      scrollThreshold !== currentScrollHeightThreshold
     ) {
+      setCurrentScrollHeightThreshold(scrollThreshold);
       onNextCallback()
         .then((success) => {
           if (success) {
-            setUpperBoundary(upperBoundary + limit);
-            setLowerBoundary(lowerBoundary + limit);
-
-            if (overlayRef !== null) {
-              const scrollPos = limit * rowHeight;
-              overlayRef.current?.scrollTo(0, scrollPos * 2);
-            }
+            setFetchedResults((prevState) => prevState + limit);
           }
         })
         .catch(() => {});
     }
-    setCurrentScrollTopPosition(scrollTop);
-  };
+  }, [
+    currentScrollHeightThreshold,
+    contentHeight,
+    fetchedResults,
+    isLoading,
+    limit,
+    onNextCallback,
+    totalResults
+  ]);
 
-  const handleScrollDebounced = debounce(handleScroll, 100);
+  useEffect(() => {
+    document.addEventListener("scroll", handleScroll);
 
-  return (
-    <div
-      ref={overlayRef}
-      className="w-full h-screen overflow-y-scroll no-scrollbar"
-      onScroll={handleScrollDebounced}
-    >
-      {children}
-    </div>
-  );
+    return () => document.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  return children;
 };
 
 export default InfiniteScroll;

@@ -2,18 +2,28 @@ import { useEffect, useState } from "react";
 import DefaultImage from "../../assets/hot-topic-deafult.webp";
 import { relativeTimeToDate } from "../../utils/dayjs";
 import InfiniteScroll from "../InfiniteScroll";
-import LatestNewsSkeleton from "./LatestNewsSkeleton";
 import { NEWS_API_KEY } from "../../utils/constants";
+import LatestNewsSkeleton from "./LatestNewsSkeleton";
+import { useWindowResize } from "../../hooks/useWindowResize";
 
 const LatestNews = () => {
   const limit = 100;
-  const buffer = limit * 3;
-  const cache = buffer - limit;
   const [items, setItems] = useState<NewsArticle[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const [scrollDirection, setScrollDirection] = useState("down");
+  const { width: windowWidth } = useWindowResize();
+
+  const rowHeight =
+    windowWidth >= 1280
+      ? 350
+      : windowWidth >= 1024
+        ? 300
+        : windowWidth >= 640
+          ? 265
+          : 220;
+  const elementsInRow = windowWidth >= 1024 ? 4 : windowWidth >= 640 ? 3 : 2;
+  const contentHeight = (rowHeight * limit) / elementsInRow;
 
   const fetchData = async (page: number) => {
     try {
@@ -42,40 +52,13 @@ const LatestNews = () => {
       });
   }, []);
 
-  const prevCallback = async () => {
-    try {
-      setScrollDirection("up");
-      setIsLoading(true);
-      const data = await fetchData(currentPage - 1);
-
-      if (data) {
-        const newItems = [...data.articles, ...items.slice(0, cache)];
-        setItems(newItems);
-        setTotalResults(data.totalResults);
-        setCurrentPage((state) => state - 1);
-        setIsLoading(false);
-        return true;
-      }
-      setScrollDirection("");
-      setIsLoading(false);
-      return false;
-    } catch (err) {
-      console.log(err);
-      setIsLoading(false);
-      setScrollDirection("");
-      return false;
-    }
-  };
-
   const nextCallback = async () => {
     try {
       setIsLoading(true);
-      setScrollDirection("down");
       const data = await fetchData(currentPage + 1);
 
-      if (data) {
-        const newItems = [...data.articles, ...items.slice(0, cache)];
-        setItems(newItems);
+      if (data && data.articles) {
+        setItems((prevItems) => [...prevItems, ...data.articles]);
         setTotalResults(data.totalResults);
         setCurrentPage((state) => state + 1);
         setIsLoading(false);
@@ -86,7 +69,6 @@ const LatestNews = () => {
     } catch (err) {
       console.log(err);
       setIsLoading(false);
-      setScrollDirection("");
       return false;
     }
   };
@@ -95,19 +77,14 @@ const LatestNews = () => {
     <section className="">
       <h2 className="text-3xl text-black font-bold mb-5">Latest News</h2>
       <InfiniteScroll
-        currentPage={currentPage}
         isLoading={isLoading}
         totalResults={totalResults}
-        buffer={buffer}
-        rowHeight={39}
         limit={limit}
-        onPrevCallback={prevCallback}
         onNextCallback={nextCallback}
+        contentHeight={contentHeight}
       >
-        {isLoading && scrollDirection === "up" && <LatestNewsSkeleton />}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8 mt-5">
-          {items &&
-            items.length &&
+          {items && !!items.length ? (
             items.map((article, index) => (
               <div
                 key={`${article.title}_${index}`}
@@ -126,14 +103,14 @@ const LatestNews = () => {
                       width={1600}
                       height={900}
                       loading="lazy"
-                      className="w-full h-[100px] sm:h-[200px] rounded-lg"
+                      className="w-full h-[100px] md:h-[130px] lg:h-[150px] xl:h-[200px] rounded-lg"
                       onError={(event) => {
                         event.currentTarget.src = DefaultImage;
                       }}
                     />
                   </a>
                   <a
-                    className="font-bold line-clamp-3 text sm:text-xl leading-tight hover:opacity-70 mb-5"
+                    className="font-bold line-clamp-3 text md:text-[18px] lg:text-xl leading-tight hover:opacity-70 mb-5"
                     href={article.url}
                     target="_blank"
                     rel="noreferrer"
@@ -142,14 +119,17 @@ const LatestNews = () => {
                   </a>
                 </div>
                 <div className="mt-2">
-                  <p className="text-xs leading-none sm:text-sm opacity-90">
+                  <p className="text-xs leading-none md:text-sm opacity-90">
                     {relativeTimeToDate(article.publishedAt)}
                   </p>
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <LatestNewsSkeleton />
+          )}
+          {isLoading && <LatestNewsSkeleton />}
         </div>
-        {isLoading && scrollDirection === "down" && <LatestNewsSkeleton />}
       </InfiniteScroll>
     </section>
   );
