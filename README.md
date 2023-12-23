@@ -1,5 +1,6 @@
 # News Portal
 Web application for latest news.
+Live URL: news-portal-swart.vercel.app
 
 ## Installation
 - Use Node >= 18 and Yarn.
