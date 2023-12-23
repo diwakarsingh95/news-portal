@@ -13,9 +13,10 @@ const LatestNews = () => {
   const [totalResults, setTotalResults] = useState(0);
 
   const fetchData = async (page: number) => {
+    const API_KEY = import.meta.env.VITE_NEWS_API_KEY as string;
     try {
       const res = await fetch(
-        `https://newsapi.org/v2/everything?q=news&sortBy=publishedAtpageSize=${limit}&page=${page}&apiKey=d6dfca3ae03f4bafac99e4fb3dc56354`
+        `https://newsapi.org/v2/everything?q=news&sortBy=publishedAtpageSize=${limit}&page=${page}&apiKey=${API_KEY}`
       );
       const data = (await res.json()) as NewsResponse;
       return data;
@@ -33,11 +34,14 @@ const LatestNews = () => {
         setIsLoading(false);
         setTotalResults(res ? res.totalResults : 0);
       })
-      .catch(() => {});
+      .catch(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const prevCallback = async () => {
     try {
+      setIsLoading(true);
       const data = await fetchData(currentPage - 1);
 
       if (data) {
@@ -45,16 +49,19 @@ const LatestNews = () => {
         setItems(newItems);
         setTotalResults(data.totalResults);
         setCurrentPage((state) => state - 1);
+        setIsLoading(false);
       }
       return true;
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
       return false;
     }
   };
 
   const nextCallback = async () => {
     try {
+      setIsLoading(true);
       const data = await fetchData(currentPage + 1);
 
       if (data) {
@@ -62,10 +69,12 @@ const LatestNews = () => {
         setItems(newItems);
         setTotalResults(data.totalResults);
         setCurrentPage((state) => state + 1);
+        setIsLoading(false);
       }
       return true;
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
       return false;
     }
   };

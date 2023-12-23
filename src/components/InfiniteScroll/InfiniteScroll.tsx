@@ -80,7 +80,7 @@ const InfiniteScroll = ({
     setCurrentScrollTopPosition(scrollTop);
   };
 
-  const handleScrollDebounced = debounce(handleScroll, 500);
+  const handleScrollDebounced = debounce(handleScroll, 100);
 
   return (
     <div

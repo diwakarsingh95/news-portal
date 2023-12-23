@@ -1,6 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithAuth from "./baseQueryWithAuth";
 
+const API_KEY = import.meta.env.VITE_NEWS_API_KEY as string;
+
 export const newsApi = createApi({
   reducerPath: "news",
   baseQuery: baseQueryWithAuth({ baseUrl: "https://newsapi.org/v2/" }),
@@ -9,7 +11,7 @@ export const newsApi = createApi({
   endpoints: (builder) => ({
     getTopHeadlines: builder.query<NewsResponse, NewsQueryParams>({
       query: ({ pageSize, page }) => {
-        const url = `top-headlines?country=in&pageSize=${pageSize}&page=${page}&apiKey=d6dfca3ae03f4bafac99e4fb3dc56354`;
+        const url = `top-headlines?country=in&pageSize=${pageSize}&page=${page}&apiKey=${API_KEY}`;
         return url;
       }
     })
