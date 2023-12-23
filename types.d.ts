@@ -1,9 +1,9 @@
-interface Source {
+type Source = {
   id: string;
   name: string;
-}
+};
 
-interface TopHeadlineArticle {
+type NewsArticle = {
   source: Source;
   author: string;
   title: string;
@@ -12,15 +12,15 @@ interface TopHeadlineArticle {
   urlToImage: string;
   publishedAt: string;
   content: string;
-}
-
-type TopHeadlinesResponse = {
-  status: string;
-  totalResults: number;
-  articles: TopHeadlineArticle[];
 };
 
-interface TopHeadlinesQueryParams {
+type NewsResponse = {
+  status: string;
+  totalResults: number;
+  articles: NewsArticle[];
+};
+
+type NewsQueryParams = {
   pageSize: number;
   page: number;
-}
+};

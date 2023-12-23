@@ -35,7 +35,7 @@ const HotTopics = () => {
       (articlesData && !articlesData.length) ? (
         <HotTopicsSkeleton />
       ) : (
-        <Slider {...sliderSettings} fade>
+        <Slider {...sliderSettings} fade lazyLoad="progressive">
           {articlesData.map((article, index) => (
             <div
               key={`${article.title}_${index}`}

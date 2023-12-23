@@ -7,10 +7,7 @@ export const newsApi = createApi({
   keepUnusedDataFor: 0,
   tagTypes: ["News"],
   endpoints: (builder) => ({
-    getTopHeadlines: builder.query<
-      TopHeadlinesResponse,
-      TopHeadlinesQueryParams
-    >({
+    getTopHeadlines: builder.query<NewsResponse, NewsQueryParams>({
       query: ({ pageSize, page }) => {
         const url = `top-headlines?country=in&pageSize=${pageSize}&page=${page}&apiKey=96028092f2674f7082e8720931735774`;
         return url;
