@@ -88,17 +88,9 @@ const InfiniteScroll = ({
       className="w-full h-screen overflow-y-scroll no-scrollbar"
       onScroll={handleScrollDebounced}
     >
-      {isLoading &&
-        scrollDirection === "up" &&
-        Array(8)
-          .fill(1)
-          .map((_, index) => <LatestNewsSkeleton key={index} />)}
+      {isLoading && scrollDirection === "up" && <LatestNewsSkeleton />}
       {children}
-      {isLoading &&
-        scrollDirection === "down" &&
-        Array(8)
-          .fill(1)
-          .map((_, index) => <LatestNewsSkeleton key={index} />)}
+      {isLoading && scrollDirection === "down" && <LatestNewsSkeleton />}
     </div>
   );
 };
