@@ -31,7 +31,6 @@ const InfiniteScroll = ({
   const [upperBoundary, setUpperBoundary] = useState(offset);
   const [lowerBoundary, setLowerBoundary] = useState(buffer - 1);
   const [currentScrollTopPosition, setCurrentScrollTopPosition] = useState(0);
-  const [scrollDirection, setScrollDirection] = useState("down");
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
     if (isLoading) {
@@ -47,7 +46,6 @@ const InfiniteScroll = ({
     const isUp = scrollTop < currentScrollTopPosition;
 
     if (isUp && currentPage > 1 && scrollTop < 500) {
-      setScrollDirection("up");
       onPrevCallback()
         .then((success) => {
           if (success) {
@@ -66,7 +64,6 @@ const InfiniteScroll = ({
       totalResults > upperBoundary &&
       scrollTop + clientHeight >= scrollHeight - 500
     ) {
-      setScrollDirection("down");
       onNextCallback()
         .then((success) => {
           if (success) {
@@ -92,9 +89,7 @@ const InfiniteScroll = ({
       className="w-full h-screen overflow-y-scroll no-scrollbar"
       onScroll={handleScrollDebounced}
     >
-      {isLoading && scrollDirection === "up" && <LatestNewsSkeleton />}
       {children}
-      {isLoading && scrollDirection === "down" && <LatestNewsSkeleton />}
     </div>
   );
 };

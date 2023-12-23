@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DefaultImage from "../../assets/hot-topic-deafult.webp";
 import { relativeTimeToDate } from "../../utils/dayjs";
 import InfiniteScroll from "../InfiniteScroll";
+import LatestNewsSkeleton from "./LatestNewsSkeleton";
 
 const LatestNews = () => {
   const limit = 100;
@@ -11,6 +12,7 @@ const LatestNews = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
+  const [scrollDirection, setScrollDirection] = useState("down");
 
   const fetchData = async (page: number) => {
     const API_KEY = import.meta.env.VITE_NEWS_API_KEY as string;
@@ -41,6 +43,7 @@ const LatestNews = () => {
 
   const prevCallback = async () => {
     try {
+      setScrollDirection("up");
       setIsLoading(true);
       const data = await fetchData(currentPage - 1);
 
@@ -51,11 +54,13 @@ const LatestNews = () => {
         setCurrentPage((state) => state - 1);
         return true;
       }
+      setScrollDirection("");
       setIsLoading(false);
       return false;
     } catch (err) {
       console.log(err);
       setIsLoading(false);
+      setScrollDirection("");
       return false;
     }
   };
@@ -63,6 +68,7 @@ const LatestNews = () => {
   const nextCallback = async () => {
     try {
       setIsLoading(true);
+      setScrollDirection("down");
       const data = await fetchData(currentPage + 1);
 
       if (data) {
@@ -77,6 +83,7 @@ const LatestNews = () => {
     } catch (err) {
       console.log(err);
       setIsLoading(false);
+      setScrollDirection("");
       return false;
     }
   };
@@ -94,6 +101,7 @@ const LatestNews = () => {
         onPrevCallback={prevCallback}
         onNextCallback={nextCallback}
       >
+        {isLoading && scrollDirection === "up" && <LatestNewsSkeleton />}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8 mt-5">
           {items &&
             items.length &&
@@ -103,7 +111,12 @@ const LatestNews = () => {
                 className="h-full flex flex-col"
               >
                 <div className="flex-1 flex flex-col gap-4">
-                  <a href={article.url} className="block">
+                  <a
+                    href={article.url}
+                    className="block"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <img
                       src={article.urlToImage || DefaultImage}
                       alt={article.title}
@@ -119,6 +132,8 @@ const LatestNews = () => {
                   <a
                     className="font-bold line-clamp-3 text sm:text-xl leading-tight hover:opacity-70 mb-5"
                     href={article.url}
+                    target="_blank"
+                    rel="noreferrer"
                   >
                     {article.title}
                   </a>
@@ -131,6 +146,7 @@ const LatestNews = () => {
               </div>
             ))}
         </div>
+        {isLoading && scrollDirection === "down" && <LatestNewsSkeleton />}
       </InfiniteScroll>
     </section>
   );
