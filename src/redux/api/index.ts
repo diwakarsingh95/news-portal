@@ -9,7 +9,7 @@ export const newsApi = createApi({
   endpoints: (builder) => ({
     getTopHeadlines: builder.query<NewsResponse, NewsQueryParams>({
       query: ({ pageSize, page }) => {
-        const url = `top-headlines?country=in&pageSize=${pageSize}&page=${page}&apiKey=96028092f2674f7082e8720931735774`;
+        const url = `top-headlines?country=in&pageSize=${pageSize}&page=${page}&apiKey=d6dfca3ae03f4bafac99e4fb3dc56354`;
         return url;
       }
     })

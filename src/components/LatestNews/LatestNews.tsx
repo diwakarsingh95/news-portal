@@ -15,7 +15,7 @@ const LatestNews = () => {
   const fetchData = async (page: number) => {
     try {
       const res = await fetch(
-        `https://newsapi.org/v2/everything?q=news&sortBy=publishedAtpageSize=${limit}&page=${page}&apiKey=96028092f2674f7082e8720931735774`
+        `https://newsapi.org/v2/everything?q=news&sortBy=publishedAtpageSize=${limit}&page=${page}&apiKey=d6dfca3ae03f4bafac99e4fb3dc56354`
       );
       const data = (await res.json()) as NewsResponse;
       return data;
