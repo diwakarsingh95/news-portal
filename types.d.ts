@@ -21,6 +21,6 @@ type TopHeadlinesResponse = {
 };
 
 interface TopHeadlinesQueryParams {
-  pageSize: 10 | number;
-  page: 1 | number;
+  pageSize: number;
+  page: number;
 }

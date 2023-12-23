@@ -6,11 +6,11 @@ type LayoutProps = { children: ReactNode };
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <>
+    <div className="">
       <Header />
-      <main className="my-[80px]">{children}</main>
+      <main className="container mx-auto mt-16 p-4">{children}</main>
       <Footer />
-    </>
+    </div>
   );
 };
 
