@@ -9,8 +9,12 @@ const Hero = () => {
           <HotTopics />
         </div>
         <div className="order-1 md:order-2">
-          <h2 className="hidden md:block">{dayjs().format("dddd DD MMM YY")}</h2>
-          <h3>Weather</h3>
+          <h2 className="hidden md:block text-sky-600 lg:text-xl font-bold leading-tight">
+            {dayjs().format("dddd DD MMM YY'")}
+          </h2>
+          <div className="mt-5">
+            <h3>Weather Widget</h3>
+          </div>
         </div>
       </div>
     </section>
