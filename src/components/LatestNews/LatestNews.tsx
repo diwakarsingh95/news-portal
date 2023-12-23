@@ -49,9 +49,10 @@ const LatestNews = () => {
         setItems(newItems);
         setTotalResults(data.totalResults);
         setCurrentPage((state) => state - 1);
-        setIsLoading(false);
+        return true;
       }
-      return true;
+      setIsLoading(false);
+      return false;
     } catch (err) {
       console.log(err);
       setIsLoading(false);
@@ -69,9 +70,10 @@ const LatestNews = () => {
         setItems(newItems);
         setTotalResults(data.totalResults);
         setCurrentPage((state) => state + 1);
-        setIsLoading(false);
+        return true;
       }
-      return true;
+      setIsLoading(false);
+      return false;
     } catch (err) {
       console.log(err);
       setIsLoading(false);

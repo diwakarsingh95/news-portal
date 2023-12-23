@@ -49,13 +49,15 @@ const InfiniteScroll = ({
     if (isUp && currentPage > 1 && scrollTop < 500) {
       setScrollDirection("up");
       onPrevCallback()
-        .then(() => {
-          setUpperBoundary(upperBoundary - limit);
-          setLowerBoundary(lowerBoundary - limit);
+        .then((success) => {
+          if (success) {
+            setUpperBoundary(upperBoundary - limit);
+            setLowerBoundary(lowerBoundary - limit);
 
-          if (overlayRef !== null) {
-            const scrollPos = limit * rowHeight;
-            overlayRef.current?.scrollTo(0, scrollPos);
+            if (overlayRef !== null) {
+              const scrollPos = limit * rowHeight;
+              overlayRef.current?.scrollTo(0, scrollPos);
+            }
           }
         })
         .catch(() => {});
@@ -66,13 +68,15 @@ const InfiniteScroll = ({
     ) {
       setScrollDirection("down");
       onNextCallback()
-        .then(() => {
-          setUpperBoundary(upperBoundary + limit);
-          setLowerBoundary(lowerBoundary + limit);
+        .then((success) => {
+          if (success) {
+            setUpperBoundary(upperBoundary + limit);
+            setLowerBoundary(lowerBoundary + limit);
 
-          if (overlayRef !== null) {
-            const scrollPos = limit * rowHeight;
-            overlayRef.current?.scrollTo(0, scrollPos * 2);
+            if (overlayRef !== null) {
+              const scrollPos = limit * rowHeight;
+              overlayRef.current?.scrollTo(0, scrollPos * 2);
+            }
           }
         })
         .catch(() => {});
