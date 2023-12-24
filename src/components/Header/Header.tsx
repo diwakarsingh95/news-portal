@@ -3,7 +3,7 @@ import { MdLogout } from "react-icons/md";
 
 const Header = () => {
   return (
-    <header className="fixed w-full top-0 z-10 py-6 m-0 p-0 xl:px-20">
+    <header className="fixed w-full top-0 z-10 py-6 m-0 px-0 xl:px-20">
       <div className="container mx-auto px-5 sm:px-0">
         <div className="flex justify-between items-center">
           <h1 className="font-bold flex flex-wrap leading-none items-center gap-2">
