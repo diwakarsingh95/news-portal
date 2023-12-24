@@ -13,6 +13,12 @@ export const newsApi = createApi({
         const url = `top-headlines?country=in&pageSize=${pageSize}&page=${page}&apiKey=${NEWS_API_KEY}`;
         return url;
       }
+    }),
+    getLatestNews: builder.query<NewsResponse, void>({
+      query: () => {
+        const url = `everything?q=news&sortBy=publishedAtpageSize=100&page=1&apiKey=${NEWS_API_KEY}`;
+        return url;
+      }
     })
   })
 });
@@ -34,5 +40,5 @@ export const weatherApi = createApi({
   })
 });
 
-export const { useGetTopHeadlinesQuery } = newsApi;
+export const { useGetTopHeadlinesQuery, useGetLatestNewsQuery } = newsApi;
 export const { useGetCurrentWeatherDataQuery } = weatherApi;
