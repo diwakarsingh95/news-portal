@@ -28,7 +28,7 @@ const HotTopics = () => {
 
   return (
     <>
-      <h2 className="text-3xl text-black font-bold">Hot Topics</h2>
+      <h2 className="text-3xl text-black font-bold mt-0 md:mt-2">Hot Topics</h2>
       {isLoading ||
       !data ||
       !articlesData ||
@@ -39,22 +39,22 @@ const HotTopics = () => {
           {articlesData.map((article, index) => (
             <div
               key={`${article.title}_${index}`}
-              className="relative h-[200px] sm:h-[300px] xl:h-[400px]"
+              className="relative h-[200px] sm:h-[250px] md:h-[220px] lg:h-[276px] xl:h-[348px] 2xl:h-[400px]"
             >
               <img
                 src={article.urlToImage || DefaultImage}
                 alt={article.title}
                 width={1600}
                 height={900}
-                loading="lazy"
-                className="h-full w-full rounded-lg"
+                loading={index !== 0 ? "lazy" : "eager"}
+                className="w-full h-full rounded-lg mx-auto"
                 onError={(event) => {
                   event.currentTarget.src = DefaultImage;
                 }}
               />
-              <div className="text-white absolute left-4 md:left-10 bottom-5 md:bottom-7 w-2/3 md:w-3/5 ">
+              <div className="text-white absolute left-5 lg:left-10 bottom-5 lg:bottom-7 w-2/3 md:w-3/5 ">
                 <a
-                  className="font-bold line-clamp-2 md:line-clamp-3 md:text-xl lg:text-3xl leading-5 md:leading-normal"
+                  className="font-bold line-clamp-2 lg:line-clamp-3 sm:text-xl lg:text-2xl leading-5 md:leading-normal"
                   href={article.url}
                 >
                   {article.title}

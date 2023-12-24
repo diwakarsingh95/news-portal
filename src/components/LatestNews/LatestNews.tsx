@@ -126,7 +126,7 @@ const LatestNews = () => {
 
   return (
     <section className="">
-      <h2 className="text-3xl text-black font-bold mb-8">Latest News</h2>
+      <h2 className="text-3xl text-black font-bold mt-2 mb-6">Latest News</h2>
       {loadingInitialData && <LatestNewsSkeleton />}
       {items && !!items.length && (
         <InfiniteLoader

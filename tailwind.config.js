@@ -6,6 +6,9 @@ export default {
       colors: {
         white: "#F8F8F8",
         gray: "#949494"
+      },
+      screens: {
+        "2xl": "1440px"
       }
     }
   },
